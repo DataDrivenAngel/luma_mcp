@@ -1,15 +1,11 @@
 # LUMA MCP Server
 
-A Model Context Protocol (MCP) server for creating and managing LUMA events. Built with FastAPI for simplicity and performance.
+A Model Context Protocol (MCP) server for creating and managing LUMA events. 
 
 ## Features
 
 - **Event CRUD Operations**: Create, read, update, delete LUMA events
 - **Event Templates**: Pre-built templates for common event types (meetups, workshops, conferences, etc.)
-- **Rate Limiting**: Built-in rate limiting with exponential backoff
-- **Error Handling**: Comprehensive error handling with proper HTTP status codes
-- **Async Support**: Full async/await support for high performance
-- **Type Safety**: Full Pydantic models for request/response validation
 
 ## Quick Start
 
@@ -21,23 +17,14 @@ A Model Context Protocol (MCP) server for creating and managing LUMA events. Bui
 
 ### Installation
 
-1. Clone the repository:
-```bash
-cd luma_mcp
-```
 
-2. Install dependencies:
-```bash
-pip install -e .
-```
-
-3. Set up environment variables:
+1. Set up environment variables:
 ```bash
 cp .env.example .env
 # Edit .env with your LUMA API key
 ```
 
-4. Run the server:
+2. Run the server:
 ```bash
 python -m src.main
 ```
@@ -83,10 +70,7 @@ LUMA_DEBUG=false
 The server includes predefined templates for common event types:
 
 - **Meetup**: Community gatherings (2 hours, no RSVP approval)
-- **Workshop**: Interactive learning sessions (3 hours, RSVP approval required)
-- **Conference**: Large professional events (8 hours, RSVP approval required)
-- **Social Gathering**: Casual social events (4 hours, no RSVP approval)
-- **Webinar**: Online presentations (1 hour, no RSVP approval)
+
 
 ## Usage Examples
 
@@ -169,7 +153,3 @@ The server provides detailed error responses:
 - Error messages don't expose internal system details
 - Rate limiting prevents abuse
 - Request timeouts prevent hanging connections
-
-## License
-
-This project is licensed under the MIT License.
