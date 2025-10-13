@@ -107,22 +107,82 @@ print(response.json())
 
 ## Development
 
+### Prerequisites
+
+- Python 3.8+
+- [Poetry](https://python-poetry.org/) for dependency management
+- LUMA Plus subscription with API access
+
+### Setup Development Environment
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd luma_mcp
+```
+
+2. Install dependencies:
+```bash
+poetry install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your LUMA API key
+```
+
+4. Install pre-commit hooks:
+```bash
+poetry run pre-commit install
+```
+
 ### Running Tests
 
 ```bash
-pytest tests/
+# Run all tests
+poetry run pytest tests/
+
+# Run with coverage
+poetry run pytest --cov=src --cov-report=html tests/
 ```
 
-### Code Formatting
+### Code Formatting and Linting
 
 ```bash
-black src/ tests/
-isort src/ tests/
+# Format code
+poetry run black src/ tests/
+
+# Sort imports
+poetry run isort src/ tests/
+
+# Lint code
+poetry run flake8 src/ tests/
+
+# Type checking
+poetry run mypy src/
 ```
 
 ### API Documentation
 
 When running, visit `http://localhost:8000/docs` for interactive API documentation.
+
+### Project Structure
+
+```
+src/
+├── main.py              # FastAPI application entry point
+├── config.py            # Configuration management
+├── models.py            # Pydantic models and schemas
+├── luma_client.py       # LUMA API client
+├── routes/
+│   ├── __init__.py
+│   ├── events.py        # Event CRUD endpoints
+│   └── templates.py     # Template management endpoints
+└── utils/
+    ├── __init__.py
+    └── rate_limiter.py  # Rate limiting utilities
+```
 
 ## Rate Limiting
 
@@ -144,7 +204,84 @@ The server provides detailed error responses:
 }
 ```
 
-## Security
+## Architecture
+
+### System Overview
+
+The LUMA MCP Server is built as a FastAPI-based REST API that provides a clean interface for managing LUMA events. It follows a layered architecture with clear separation of concerns:
+
+- **API Layer**: FastAPI routes handling HTTP requests and responses
+- **Business Logic Layer**: Event management and template processing
+- **Data Access Layer**: LUMA API client with rate limiting and error handling
+- **Infrastructure Layer**: Configuration, logging, and utilities
+
+### Architecture Diagram
+
+```mermaid
+graph TB
+    A[Client Applications] --> B[FastAPI Server]
+    B --> C[Event Routes]
+    B --> D[Template Routes]
+    B --> E[Health Check]
+
+    C --> F[LumaClient]
+    D --> F
+
+    F --> G[Rate Limiter]
+    F --> H[HTTP Client]
+
+    G --> I[RateLimiter]
+    H --> J[httpx.AsyncClient]
+
+    K[Configuration] --> B
+    K --> F
+    K --> I
+
+    L[Models] --> C
+    L --> D
+    L --> F
+
+    M[Templates] --> D
+
+    subgraph "External Services"
+        N[LUMA API]
+    end
+
+    H --> N
+    J --> N
+
+    style B fill:#e1f5fe
+    style F fill:#f3e5f5
+    style I fill:#e8f5e8
+```
+
+### Component Descriptions
+
+#### Core Components
+
+- **FastAPI Application** (`src/main.py`): Main application entry point with middleware, routing, and exception handling
+- **LUMA Client** (`src/luma_client.py`): Async HTTP client for LUMA API interactions with retry logic and error handling
+- **Rate Limiter** (`src/utils/rate_limiter.py`): Token bucket-style rate limiting to respect LUMA API limits
+- **Configuration** (`src/config.py`): Environment-based configuration management using Pydantic settings
+
+#### Route Modules
+
+- **Events Router** (`src/routes/events.py`): CRUD operations for LUMA events
+- **Templates Router** (`src/routes/templates.py`): Predefined event templates and creation from templates
+
+#### Data Models
+
+- **Pydantic Models** (`src/models.py`): Request/response schemas with validation and type safety
+
+### Data Flow
+
+1. **Request Processing**: FastAPI receives HTTP request and validates input using Pydantic models
+2. **Rate Limiting**: Request is checked against rate limits before proceeding
+3. **API Call**: LumaClient makes authenticated request to LUMA API with retry logic
+4. **Response Handling**: API response is processed and formatted for client return
+5. **Error Handling**: Comprehensive error handling with appropriate HTTP status codes
+
+### Security Considerations
 
 - API keys are stored in environment variables (never in code)
 - HTTPS is enforced for all LUMA API requests
