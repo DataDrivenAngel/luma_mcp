@@ -17,6 +17,27 @@ A Model Context Protocol (MCP) server for creating and managing LUMA events.
 
 ### Installation
 
+Install the LUMA MCP server using pip:
+
+```bash
+pip install luma-mcp
+```
+
+Or install from source:
+
+```bash
+git clone https://github.com/your-org/luma-mcp.git
+cd luma-mcp
+pip install .
+```
+
+For development installation with extra dependencies:
+
+```bash
+pip install luma-mcp[dev]
+```
+
+### Setup
 
 1. Set up environment variables:
 ```bash
@@ -25,6 +46,11 @@ cp .env.example .env
 ```
 
 2. Run the server:
+```bash
+luma-mcp
+```
+
+Or run directly with Python:
 ```bash
 python -m src.main
 ```
