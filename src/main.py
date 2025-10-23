@@ -90,7 +90,8 @@ async def general_exception_handler(request: Request, exc: Exception):
     )
 
 
-if __name__ == "__main__":
+def main():
+    """Main entry point for the LUMA MCP server."""
     # Validate configuration before starting
     if not validate_api_key():
         print("ERROR: LUMA_API_KEY environment variable is required.")
@@ -104,3 +105,7 @@ if __name__ == "__main__":
         reload=settings.debug,
         log_level="info"
     )
+
+
+if __name__ == "__main__":
+    main()

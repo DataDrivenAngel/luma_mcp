@@ -7,7 +7,30 @@ name = "luma-mcp"
 version = "0.1.0"
 description = "MCP server for LUMA event management"
 readme = "README.md"
+license = {text = "MIT"}
 requires-python = ">=3.8"
+authors = [
+    {name = "LUMA MCP Team", email = "dev@luma-mcp.example.com"},
+]
+maintainers = [
+    {name = "LUMA MCP Team", email = "dev@luma-mcp.example.com"},
+]
+keywords = ["luma", "events", "api", "fastapi", "mcp", "server"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 dependencies = [
     "fastapi>=0.104.0",
     "httpx>=0.25.0",
@@ -21,12 +44,39 @@ dependencies = [
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
     "black>=23.0.0",
     "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
 ]
+docs = [
+    "mkdocs>=1.4.0",
+    "mkdocs-material>=9.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/luma-mcp"
+Documentation = "https://luma-mcp.readthedocs.io/"
+Repository = "https://github.com/your-org/luma-mcp"
+Issues = "https://github.com/your-org/luma-mcp/issues"
+Changelog = "https://github.com/your-org/luma-mcp/blob/main/CHANGELOG.md"
+
+[project.scripts]
+luma-mcp = "src.main:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/",
+    "tests/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+]
 
 [tool.black]
 line-length = 88
@@ -34,3 +84,22 @@ target-version = ['py38']
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
