@@ -5,7 +5,6 @@ A Model Context Protocol (MCP) server for creating and managing LUMA events.
 ## Features
 
 - **Event CRUD Operations**: Create, read, update, delete LUMA events
-- **Event Templates**: Pre-built templates for common event types (meetups, workshops, conferences, etc.)
 
 ## Quick Start
 
